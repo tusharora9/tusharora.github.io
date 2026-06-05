@@ -6,7 +6,7 @@ layout: default
 <style>
 
 /* =========================
-   NEURAL INTERFACE SYSTEM
+   COMPUTATIONAL NEURO + BEHAVIOR SYSTEM
    ========================= */
 
 :root {
@@ -20,7 +20,7 @@ layout: default
   --a3: #A78BFA;
 }
 
-/* ===== GLOBAL SAFE RESET ===== */
+/* ===== GLOBAL ===== */
 
 html, body {
   margin: 0;
@@ -31,80 +31,77 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ===== BACKGROUND LAYERS ===== */
+/* =========================
+   BACKGROUND LAYERS
+   ========================= */
 
-.neural-bg {
+/* neural + computational field */
+.bg-field {
   position: fixed;
   inset: 0;
   z-index: -3;
-  overflow: hidden;
-  background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15), transparent 40%),
-              radial-gradient(circle at 80% 40%, rgba(34,211,238,0.12), transparent 45%),
-              radial-gradient(circle at 50% 80%, rgba(167,139,250,0.10), transparent 50%);
-  animation: drift 18s ease-in-out infinite alternate;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.12), transparent 45%),
+    radial-gradient(circle at 70% 60%, rgba(34,211,238,0.10), transparent 50%),
+    radial-gradient(circle at 50% 30%, rgba(167,139,250,0.08), transparent 55%);
+  animation: drift 20s ease-in-out infinite alternate;
 }
 
 @keyframes drift {
-  0%   { transform: scale(1) translateY(0px); filter: hue-rotate(0deg); }
-  100% { transform: scale(1.1) translateY(-20px); filter: hue-rotate(25deg); }
+  0% { transform: scale(1) translateY(0px); }
+  100% { transform: scale(1.08) translateY(-18px); }
 }
 
-.particles {
+/* scanline microscopy effect */
+body::before {
+  content: "";
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
-}
-
-.particles span {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(34,211,238,0.5);
-  animation: float 12s linear infinite;
-}
-
-.particles span:nth-child(odd) {
-  background: rgba(59,130,246,0.4);
-}
-
-@keyframes float {
-  0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  20%  { opacity: 1; }
-  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-}
-
-.wave {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 200px;
-  z-index: -1;
-  opacity: 0.08;
   background: repeating-linear-gradient(
-    90deg,
-    rgba(34,211,238,0.5),
-    rgba(59,130,246,0.5) 2px,
-    transparent 4px,
-    transparent 12px
+    0deg,
+    rgba(255,255,255,0.02),
+    rgba(255,255,255,0.02) 1px,
+    transparent 2px,
+    transparent 6px
   );
-  animation: waveMove 8s linear infinite;
+  opacity: 0.25;
 }
 
-@keyframes waveMove {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* =========================
+   BEHAVIORAL COMPUTATION LAYER
+   ========================= */
+
+#behaviorCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.38;
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 
-/* ===== SAFETY ===== */
-
-.neural-bg, .particles, .wave {
+/* circular open-field arena */
+.arena {
+  position: fixed;
+  width: 520px;
+  height: 520px;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(167,139,250,0.15);
+  box-shadow:
+    0 0 80px rgba(34,211,238,0.05),
+    inset 0 0 80px rgba(59,130,246,0.05);
+  z-index: -2;
   pointer-events: none;
 }
 
-/* ===== LAYOUT ===== */
+/* =========================
+   UI LAYOUT
+   ========================= */
 
 .container {
   max-width: 1000px;
@@ -116,25 +113,15 @@ html, body {
   padding: 40px 0 20px;
 }
 
-/* ===== TYPOGRAPHY ===== */
-
-h1 {
-  font-size: 48px;
-  letter-spacing: -0.03em;
-}
-
-h2 {
-  margin-top: 40px;
-  font-size: 26px;
-}
+h1 { font-size: 46px; }
+h2 { margin-top: 40px; }
 
 p, li {
   color: var(--muted);
   line-height: 1.6;
 }
 
-/* ===== COMPONENTS ===== */
-
+/* cards */
 .card {
   background: var(--panel);
   border: 1px solid rgba(255,255,255,0.08);
@@ -144,15 +131,9 @@ p, li {
   backdrop-filter: blur(10px);
 }
 
-.signal {
-  height: 3px;
-  width: 60px;
-  background: linear-gradient(90deg, var(--a1), var(--a2));
-  margin: 10px 0 20px;
-  border-radius: 10px;
-}
-
-/* ===== LINKS ===== */
+/* =========================
+   LINKS
+   ========================= */
 
 a {
   color: var(--a2);
@@ -166,18 +147,112 @@ a:hover {
 </style>
 
 <!-- BACKGROUND -->
-<div class="neural-bg"></div>
+<div class="bg-field"></div>
+<div class="arena"></div>
 
-<div class="particles">
-  <span style="left:10%; animation-delay:0s;"></span>
-  <span style="left:20%; animation-delay:2s;"></span>
-  <span style="left:35%; animation-delay:4s;"></span>
-  <span style="left:50%; animation-delay:1s;"></span>
-  <span style="left:70%; animation-delay:3s;"></span>
-  <span style="left:85%; animation-delay:5s;"></span>
-</div>
+<!-- BEHAVIOR CANVAS -->
+<canvas id="behaviorCanvas"></canvas>
 
-<div class="wave"></div>
+<script>
+const canvas = document.getElementById("behaviorCanvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+/* =========================
+   COMPUTATIONAL MOUSE MODEL
+   ========================= */
+
+const mouse = {
+  x: window.innerWidth * 0.5,
+  y: window.innerHeight * 0.55,
+  vx: 2,
+  vy: 1.2
+};
+
+const target = {
+  x: window.innerWidth * 0.65,
+  y: window.innerHeight * 0.52
+};
+
+/* trajectory memory */
+let path = [];
+
+function draw() {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  /* attraction to "social zone" (computational behavioral model) */
+  let dx = target.x - mouse.x;
+  let dy = target.y - mouse.y;
+
+  mouse.vx += dx * 0.00002;
+  mouse.vy += dy * 0.00002;
+
+  /* exploratory stochasticity (open field behavior) */
+  mouse.vx += (Math.random() - 0.5) * 0.25;
+  mouse.vy += (Math.random() - 0.5) * 0.25;
+
+  mouse.vx *= 0.96;
+  mouse.vy *= 0.96;
+
+  mouse.x += mouse.vx;
+  mouse.y += mouse.vy;
+
+  /* arena boundary constraint */
+  const cx = canvas.width / 2;
+  const cy = canvas.height * 0.55;
+  const r = 250;
+
+  let dist = Math.hypot(mouse.x - cx, mouse.y - cy);
+  if (dist > r) {
+    mouse.vx *= -0.7;
+    mouse.vy *= -0.7;
+  }
+
+  /* store trajectory */
+  path.push({ x: mouse.x, y: mouse.y });
+  if (path.length > 140) path.shift();
+
+  /* =========================
+     DRAW TRAJECTORY (behavioral trace)
+     ========================= */
+
+  ctx.beginPath();
+  for (let i = 0; i < path.length; i++) {
+    const p = path[i];
+    if (i === 0) ctx.moveTo(p.x, p.y);
+    else ctx.lineTo(p.x, p.y);
+  }
+
+  ctx.strokeStyle = "rgba(167,139,250,0.55)";
+  ctx.lineWidth = 2;
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = "rgba(167,139,250,0.3)";
+  ctx.stroke();
+
+  /* current position (tracked animal / DLC-like keypoint) */
+  ctx.beginPath();
+  ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(34,211,238,0.85)";
+  ctx.fill();
+
+  /* social target zone */
+  ctx.beginPath();
+  ctx.arc(target.x, target.y, 7, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(59,130,246,0.35)";
+  ctx.fill();
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
 
 <!-- MAIN CONTENT -->
 <div class="container">
@@ -185,9 +260,9 @@ a:hover {
 <div class="hero">
 
 # Tushar Arora, PhD
-### Neuroscientist | Neural Circuits • Social Behavior • Neurotechnology
+### Neuroscientist | Neural Circuits • Behavior • Computational Modeling
 
-I study how neural circuits and neuromodulatory systems encode social behavior, with emphasis on sex-specific mechanisms and computational behavioral phenotyping.
+I study how neural circuits generate **social behavior and decision-making**, integrating in vivo recordings, computational modeling, and automated behavioral quantification.
 
 Currently Postdoctoral Fellow at Icahn School of Medicine at Mount Sinai.
 
@@ -197,83 +272,42 @@ Currently Postdoctoral Fellow at Icahn School of Medicine at Mount Sinai.
 
 ## Research
 
-<div class="signal"></div>
-
 <div class="card">
-### Neural Circuits of Social Behavior
+### Computational Behavioral Neuroscience
 
-- Hypothalamic and limbic control of social behavior  
-- Dopamine, serotonin & neuropeptide modulation  
-- Sex-specific neural circuit dynamics  
+- Mouse open-field and social interaction paradigms  
+- Quantitative trajectory analysis of behavior  
+- Neural–behavior coupling frameworks  
 </div>
 
 <div class="card">
 ### Key Project
 
-Neuropeptidergic modulation of serotonin & dopamine signaling in nucleus accumbens during social reward  
-Conducted in Dr. Anita Autry’s lab at Albert Einstein College of Medicine.
+Neuropeptidergic modulation of dopamine and serotonin signaling during social reward behavior  
+(Albert Einstein College of Medicine)
 </div>
 
 ---
 
 ## Current Position
-
-- Postdoctoral Fellow — Mount Sinai (2025–Present)  
-- Postdoctoral Fellow — Albert Einstein College of Medicine (2022–2025)  
-- Research Fellow — NBRC India (2020–2021)
-
----
-
-## Education
-
-- PhD Neuroscience — NBRC India  
-- M.Pharmacy Pharmacology — Jamia Hamdard  
-- B.Pharmacy — Kurukshetra University  
-
----
-
-<details>
-<summary><b>Awards & Fellowships</b></summary>
-
-- Jackson Labs NIH Course (2024)  
-- Kavli Institute Summer School (2017)  
-- NBRC Travel Fellowship (2017)  
-- NET Qualified (2014)  
-
-</details>
-
----
-
-<details>
-<summary><b>Teaching & Talks</b></summary>
-
-- NYU SPS Invited Lecture (2024)  
-- TA — Neuroscience Methods, Einstein (2024)
-
-</details>
+- Mount Sinai (2025–Present)  
+- Albert Einstein College of Medicine (2022–2025)  
+- NBRC India (2020–2021)
 
 ---
 
 ## Publications
 
-<details>
-<summary><b>Selected Papers</b></summary>
-
-**Sex-specific hypothalamic projection activity drives caregiving** — Nature Communications 2025  
-**Automated estrous cycle staging using ML detection** — 2025  
-**Peptide modulation in Alzheimer’s model** — 2023  
-**Synaptic signaling in trisomy hippocampus model** — 2020  
-
-</details>
+Selected work includes:
+- Social behavior neural circuits (Nature Communications 2025)  
+- Behavioral tracking using ML-based quantification  
+- Synaptic and molecular circuit mechanisms in disease models  
 
 ---
 
 ## Contact
 
 Email: tushar.arora@mssm.edu  
-[LinkedIn](https://www.linkedin.com/in/tushar-arora-a58b2b36/)  
-[Google Scholar](https://scholar.google.com/citations?user=8hG0FHQAAAAJ&hl=en)  
-[X (Twitter)](https://x.com/tusharora9)  
-[Bluesky](https://bsky.app/profile/tusharora9.bsky.social)
+LinkedIn | Google Scholar | X | Bluesky
 
 </div>
