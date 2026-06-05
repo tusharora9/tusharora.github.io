@@ -6,213 +6,208 @@ layout: default
 <style>
 
 /* =========================
-   NEURO + BEHAVIOR SYSTEM (STABLE VERSION)
+   SIMPLE DARK ACADEMIC THEME
    ========================= */
 
-:root {
-  --bg: #070A12;
-  --panel: rgba(17, 24, 39, 0.6);
-  --text: #E5E7EB;
-  --muted: #9CA3AF;
-
-  --a1: #3B82F6;
-  --a2: #22D3EE;
-  --a3: #A78BFA;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
+body {
+  background-color: #000000;
+  color: #E5E7EB;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  overflow-x: hidden;
 }
 
-/* =========================
-   BACKGROUND FIELD
-   ========================= */
-
-.bg {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.15), transparent 45%),
-    radial-gradient(circle at 70% 60%, rgba(34,211,238,0.12), transparent 50%),
-    radial-gradient(circle at 50% 30%, rgba(167,139,250,0.10), transparent 55%);
-  animation: drift 18s ease-in-out infinite alternate;
+/* Improve readability */
+h1, h2, h3 {
+  color: #ffffff;
 }
 
-@keyframes drift {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.08); }
+p, li {
+  color: #C9CDD3;
+  line-height: 1.6;
 }
 
-/* =========================
-   BEHAVIOR CANVAS
-   ========================= */
-
-#canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
+/* Links */
+a {
+  color: #22D3EE;
+  text-decoration: none;
 }
 
-/* =========================
-   SIMPLE ARENA
-   ========================= */
-
-.arena {
-  position: fixed;
-  width: 520px;
-  height: 520px;
-  left: 50%;
-  top: 55%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(167,139,250,0.15);
-  box-shadow: 0 0 80px rgba(34,211,238,0.06);
-  z-index: -2;
+a:hover {
+  text-decoration: underline;
 }
 
-/* =========================
-   CONTENT
-   ========================= */
-
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 80px 20px;
+/* Sections spacing */
+h2 {
+  margin-top: 40px;
 }
 
-h1 { font-size: 42px; }
-p { color: var(--muted); line-height: 1.6; }
+/* Details blocks */
+details {
+  background: rgba(255,255,255,0.03);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
 
-a { color: var(--a2); }
+/* Optional subtle card styling */
+div[style] {
+  backdrop-filter: blur(0px);
+}
+
+/* Make horizontal rule subtle */
+hr {
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
 
 </style>
 
-<!-- BACKGROUND LAYERS -->
-<div class="bg"></div>
-<div class="arena"></div>
-<canvas id="canvas"></canvas>
+# Welcome to my website
 
-<script>
-/* =========================
-   SAFE CANVAS INITIALIZATION
-   (NO DOM ERRORS VERSION)
-   ========================= */
+I am **Tushar Arora, PhD**, a neuroscientist exploring **neural circuits, reward processing, and social behavior**.
+I am **Tushar Arora, PhD**, a neuroscientist exploring **neural circuits and social behavior**.
 
-const c = document.getElementById("canvas");
-const ctx = c.getContext("2d");
-
-function resize(){
-  c.width = window.innerWidth;
-  c.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
-
-/* =========================
-   COMPUTATIONAL MOUSE MODEL
-   ========================= */
-
-const m = {
-  x: window.innerWidth * 0.5,
-  y: window.innerHeight * 0.55,
-  vx: 2,
-  vy: 1
-};
-
-const target = {
-  x: window.innerWidth * 0.65,
-  y: window.innerHeight * 0.52
-};
-
-let path = [];
-
-function loop(){
-
-  ctx.clearRect(0,0,c.width,c.height);
-
-  /* attraction (social/reward zone) */
-  m.vx += (target.x - m.x) * 0.00002;
-  m.vy += (target.y - m.y) * 0.00002;
-
-  /* exploration noise */
-  m.vx += (Math.random()-0.5)*0.3;
-  m.vy += (Math.random()-0.5)*0.3;
-
-  m.vx *= 0.96;
-  m.vy *= 0.96;
-
-  m.x += m.vx;
-  m.y += m.vy;
-
-  /* boundary (open field arena) */
-  const cx = c.width/2;
-  const cy = c.height*0.55;
-  const r = 250;
-
-  const d = Math.hypot(m.x-cx, m.y-cy);
-  if(d>r){
-    m.vx *= -0.7;
-    m.vy *= -0.7;
-  }
-
-  path.push({x:m.x,y:m.y});
-  if(path.length>120) path.shift();
-
-  /* trajectory */
-  ctx.beginPath();
-  for(let i=0;i<path.length;i++){
-    const p=path[i];
-    if(i==0) ctx.moveTo(p.x,p.y);
-    else ctx.lineTo(p.x,p.y);
-  }
-
-  ctx.strokeStyle="rgba(167,139,250,0.55)";
-  ctx.lineWidth=2;
-  ctx.stroke();
-
-  /* agent */
-  ctx.beginPath();
-  ctx.arc(m.x,m.y,5,0,Math.PI*2);
-  ctx.fillStyle="rgba(34,211,238,0.9)";
-  ctx.fill();
-
-  /* target */
-  ctx.beginPath();
-  ctx.arc(target.x,target.y,7,0,Math.PI*2);
-  ctx.fillStyle="rgba(59,130,246,0.4)";
-  ctx.fill();
-
-  requestAnimationFrame(loop);
-}
-
-loop();
-</script>
-
-<div class="container">
-
-# Tushar Arora, PhD  
-Neuroscientist | Neural Circuits • Behavior • Computational Modeling  
-
-I study how brain circuits generate social behavior using **in vivo recordings and computational behavioral analysis**.
+This site showcases my **research, publications, CV, and professional portfolio**.
 
 ---
 
-## Research Focus
-- Mouse behavior in open-field and social interaction paradigms  
-- Computational modeling of decision-making and exploration  
-- Neural circuit mechanisms underlying social reward  
+## Research
+
+<div style="background-color:#111111; padding:20px; border-radius:10px; margin-bottom:25px;">
+### Research Interests
+- Neural circuits for Social Behavior
+- Sex-specific neural and hormonal mechanisms
+</div>
+
+<div style="background-color:#0B1B24; padding:20px; border-left:5px solid #1E90FF; border-radius:8px; margin-bottom:25px;">
+### Key Projects
+**Neuropeptidergic modulation of Serotonin & Dopamine signals in Nucleus Accumbens during social reward**  
+Conducted in Dr. Anita Autry’s lab at Albert Einstein College of Medicine. Explored neural circuits underlying social behavior.
+</div>
+
+---
+
+## Current Position
+
+- **Postdoctoral Research Fellow** (2025–Present)  
+  Ki Goosens Lab, Icahn School of Medicine at Mount Sinai, Manhattan, NY  
+
+- **Postdoctoral Research Fellow** (2022–2025)  
+  Anita Autry Lab, Albert Einstein College of Medicine, Bronx, NY  
+
+- **Research Fellow** (2020–2021)  
+  Shiv Sharma Lab, National Brain Research Centre, Manesar, India  
+
+---
+
+## Education
+
+- **Ph.D., Neuroscience** (2012–2020)  
+  Learning & Memory Lab, Advisor: Dr. Shiv Sharma, National Brain Research Centre, Manesar, India  
+
+- **M.Pharmacy, Pharmacology** (2010–2012)  
+  Neurobehavioral Pharmacology Lab, Advisor: Dr. Divya Vohora, Jamia Hamdard, New Delhi, India  
+
+- **B.Pharmacy** (2006–2010)  
+  Institute of Pharmaceutical Sciences, Kurukshetra University, Kurukshetra, India  
+
+---
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">Awards & Fellowships</summary>
+
+- Scholarship to Short Course at Jackson Labs (NIH), 2024  
+- Summer School “Neural Circuits and Behavior”, Kavli Institute, Norway, 2017  
+- Travel Fellowship for Summer School, NBRC, India, 2017  
+- Qualified National Eligibility Test (NET), 2014  
+- Graduate Pharmacy Aptitude Test (GPAT), 2010  
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">Teaching & Lectures</summary>
+
+- Invited Lecture – Research Process and Methodology, NYU School of Professional Studies, 2024  
+- Teaching Assistant – Neuroscience Methods, Albert Einstein College of Medicine, 2024  
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">Presentations & Conferences</summary>
+
+- Poster & talks: “Modulation of serotonergic transmission by galanin in social behavior”, Einstein, 2023–2025  
+- #ScienceStrong Poster Contest, Einstein, 2024  
+- Workshops & seminars: Flatiron Institute, Jackson Lab, NIH, Rockefeller University, CSHL (2012–2025)  
+
+</details>
+
+---
+
+<div style="background-color:#111111; padding:20px; border-radius:10px; margin-bottom:25px;">
+### Technical Skills
+**Experimental:** Optogenetics, Fiber Photometry, Stereotactic Viral Surgeries, Acute Brain Slice Preparation, FISH, IHC, ELISA, Calcium Imaging, LTP Recordings, Cell Culture, Microscopy, SDS-PAGE, Western Blotting, PCR, Genotyping  
+**Programming/Software:** MATLAB, Python, Bonsai, ZEN, ImageJ, GraphPad, Illustrator, EndNote, Mendeley, Zotero  
+**Behavioral Analysis:** DeepLabCut, SLEAP, A-Soid, Keypoint Moseq
+</div>
+
+---
+
+## Publications
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">2025</summary>
+
+**[Sex-specific hypothalamic neural projection activity drives caregiving in mice](https://doi.org/10.1038/s41467-025-59352-7)**  
+I. Carta, T. Arora, S. Lutzu, G. Podda, G.N. Vera Ortega, S. Rudolph, A.E. Autry  
+*Nature Communications 16 (1), 4116, 2025*
+
+**[A novel method for estrous cycle staging using supervised object detection](https://doi.org/10.1038/s44277-024-00020-x)**  
+B. Babaev, S. Goyal, T. Arora, A. Autry, R.A. Ross  
+*NPP—Digital Psychiatry and Neuroscience 3 (1), 3, 2025*
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">2024</summary>
+
+**[The potential of neuroscience in transforming business: a meta-analysis](https://doi.org/10.1186/s43093-024-00369-7)**  
+S. Khaneja, T. Arora  
+*Future Business Journal 10 (1), 77, 2024*
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">2023</summary>
+
+**[Cyclic Glycine-Proline Improves Memory and Reduces Amyloid Plaque Load in APP/PS1 Transgenic Mouse Model of Alzheimer’s Disease](https://doi.org/10.1155/2023/1753791)**  
+T. Arora, S.K. Sharma  
+*International Journal of Alzheimer’s Disease 2023 (1), 1753791*
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">2020</summary>
+
+**[Effects of a tripeptide on mitogen-activated protein kinase and glycogen synthase kinase activation in a cell line derived from the foetal hippocampus of a trisomy 16 mouse](https://doi.org/10.1007/s12640-019-00130-x)**  
+T. Arora, P. Caviedes, S.K. Sharma  
+*Neurotoxicity Research 37 (3), 714–723, 2020*
+
+</details>
+
+<details>
+<summary style="font-weight:bold; font-size:16px;">2013</summary>
+
+**[Oxcarbazepine and fluoxetine protect against mouse models of obsessive compulsive disorder through modulation of cortical serotonin and CREB pathway](https://doi.org/10.1016/j.bbr.2013.02.038)**  
+T. Arora, M. Bhowmik, R. Khanam, D. Vohora  
+*Behavioural Brain Research 247, 146–152, 2013*
+
+</details>
 
 ---
 
 ## Contact
-tushar.arora@mssm.edu  
-LinkedIn | Google Scholar | X | Bluesky  
 
-</div>
+- Email: [tushar.arora@mssm.edu](mailto:tushar.arora@mssm.edu)  
+- [LinkedIn](https://www.linkedin.com/in/tushar-arora-a58b2b36/)  
+- [Google Scholar](https://scholar.google.com/citations?user=8hG0FHQAAAAJ&hl=en)  
+- [X (Twitter)](https://x.com/tusharora9)  
+- [Bluesky](https://bsky.app/profile/tusharora9.bsky.social)
