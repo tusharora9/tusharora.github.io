@@ -3,152 +3,277 @@ title: Tushar Arora
 layout: default
 ---
 
-# Welcome to my website
+<style>
 
-I am **Tushar Arora, PhD**, a neuroscientist exploring **neural circuits and social behavior**.
+/* =========================
+   NEURAL INTERFACE SYSTEM
+   ========================= */
 
-This site showcases my **research, publications, CV, and professional portfolio**.
+:root {
+  --bg: #070A12;
+  --panel: rgba(17, 24, 39, 0.6);
+  --text: #E5E7EB;
+  --muted: #9CA3AF;
+
+  --a1: #3B82F6;
+  --a2: #22D3EE;
+  --a3: #A78BFA;
+}
+
+/* ===== GLOBAL SAFE RESET ===== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ===== BACKGROUND LAYERS ===== */
+
+.neural-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.15), transparent 40%),
+              radial-gradient(circle at 80% 40%, rgba(34,211,238,0.12), transparent 45%),
+              radial-gradient(circle at 50% 80%, rgba(167,139,250,0.10), transparent 50%);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  0%   { transform: scale(1) translateY(0px); filter: hue-rotate(0deg); }
+  100% { transform: scale(1.1) translateY(-20px); filter: hue-rotate(25deg); }
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(34,211,238,0.5);
+  animation: float 12s linear infinite;
+}
+
+.particles span:nth-child(odd) {
+  background: rgba(59,130,246,0.4);
+}
+
+@keyframes float {
+  0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.wave {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 200px;
+  z-index: -1;
+  opacity: 0.08;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(34,211,238,0.5),
+    rgba(59,130,246,0.5) 2px,
+    transparent 4px,
+    transparent 12px
+  );
+  animation: waveMove 8s linear infinite;
+}
+
+@keyframes waveMove {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ===== SAFETY ===== */
+
+.neural-bg, .particles, .wave {
+  pointer-events: none;
+}
+
+/* ===== LAYOUT ===== */
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.hero {
+  padding: 40px 0 20px;
+}
+
+/* ===== TYPOGRAPHY ===== */
+
+h1 {
+  font-size: 48px;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  margin-top: 40px;
+  font-size: 26px;
+}
+
+p, li {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== COMPONENTS ===== */
+
+.card {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 14px 0;
+  backdrop-filter: blur(10px);
+}
+
+.signal {
+  height: 3px;
+  width: 60px;
+  background: linear-gradient(90deg, var(--a1), var(--a2));
+  margin: 10px 0 20px;
+  border-radius: 10px;
+}
+
+/* ===== LINKS ===== */
+
+a {
+  color: var(--a2);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+</style>
+
+<!-- BACKGROUND -->
+<div class="neural-bg"></div>
+
+<div class="particles">
+  <span style="left:10%; animation-delay:0s;"></span>
+  <span style="left:20%; animation-delay:2s;"></span>
+  <span style="left:35%; animation-delay:4s;"></span>
+  <span style="left:50%; animation-delay:1s;"></span>
+  <span style="left:70%; animation-delay:3s;"></span>
+  <span style="left:85%; animation-delay:5s;"></span>
+</div>
+
+<div class="wave"></div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+<div class="hero">
+
+# Tushar Arora, PhD
+### Neuroscientist | Neural Circuits • Social Behavior • Neurotechnology
+
+I study how neural circuits and neuromodulatory systems encode social behavior, with emphasis on sex-specific mechanisms and computational behavioral phenotyping.
+
+Currently Postdoctoral Fellow at Icahn School of Medicine at Mount Sinai.
+
+</div>
 
 ---
 
 ## Research
 
-<div style="background-color:#f2f2f2; padding:20px; border-radius:10px; margin-bottom:25px;">
-### Research Interests
-- Neural circuits for Social Behavior
-- Sex-specific neural and hormonal mechanisms
+<div class="signal"></div>
+
+<div class="card">
+### Neural Circuits of Social Behavior
+
+- Hypothalamic and limbic control of social behavior  
+- Dopamine, serotonin & neuropeptide modulation  
+- Sex-specific neural circuit dynamics  
 </div>
 
-<div style="background-color:#e6f7ff; padding:20px; border-left:5px solid #1E90FF; border-radius:8px; margin-bottom:25px;">
-### Key Projects
-**Neuropeptidergic modulation of Serotonin & Dopamine signals in Nucleus Accumbens during social reward**  
-Conducted in Dr. Anita Autry’s lab at Albert Einstein College of Medicine. Explored neural circuits underlying social behavior.
+<div class="card">
+### Key Project
+
+Neuropeptidergic modulation of serotonin & dopamine signaling in nucleus accumbens during social reward  
+Conducted in Dr. Anita Autry’s lab at Albert Einstein College of Medicine.
 </div>
 
 ---
 
 ## Current Position
 
-- **Postdoctoral Research Fellow** (2025–Present)  
-  Ki Goosens Lab, Icahn School of Medicine at Mount Sinai, Manhattan, NY  
-
-- **Postdoctoral Research Fellow** (2022–2025)  
-  Anita Autry Lab, Albert Einstein College of Medicine, Bronx, NY  
-
-- **Research Fellow** (2020–2021)  
-  Shiv Sharma Lab, National Brain Research Centre, Manesar, India  
+- Postdoctoral Fellow — Mount Sinai (2025–Present)  
+- Postdoctoral Fellow — Albert Einstein College of Medicine (2022–2025)  
+- Research Fellow — NBRC India (2020–2021)
 
 ---
 
 ## Education
 
-- **Ph.D., Neuroscience** (2012–2020)  
-  Learning & Memory Lab, Advisor: Dr. Shiv Sharma, National Brain Research Centre, Manesar, India  
-
-- **M.Pharmacy, Pharmacology** (2010–2012)  
-  Neurobehavioral Pharmacology Lab, Advisor: Dr. Divya Vohora, Jamia Hamdard, New Delhi, India  
-
-- **B.Pharmacy** (2006–2010)  
-  Institute of Pharmaceutical Sciences, Kurukshetra University, Kurukshetra, India  
+- PhD Neuroscience — NBRC India  
+- M.Pharmacy Pharmacology — Jamia Hamdard  
+- B.Pharmacy — Kurukshetra University  
 
 ---
 
 <details>
-<summary style="font-weight:bold; font-size:16px;">Awards & Fellowships</summary>
+<summary><b>Awards & Fellowships</b></summary>
 
-- Scholarship to Short Course at Jackson Labs (NIH), 2024  
-- Summer School “Neural Circuits and Behavior”, Kavli Institute, Norway, 2017  
-- Travel Fellowship for Summer School, NBRC, India, 2017  
-- Qualified National Eligibility Test (NET), 2014  
-- Graduate Pharmacy Aptitude Test (GPAT), 2010  
-
-</details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">Teaching & Lectures</summary>
-
-- Invited Lecture – Research Process and Methodology, NYU School of Professional Studies, 2024  
-- Teaching Assistant – Neuroscience Methods, Albert Einstein College of Medicine, 2024  
-
-</details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">Presentations & Conferences</summary>
-
-- Poster & talks: “Modulation of serotonergic transmission by galanin in social behavior”, Einstein, 2023–2025  
-- #ScienceStrong Poster Contest, Einstein, 2024  
-- Workshops & seminars: Flatiron Institute, Jackson Lab, NIH, Rockefeller University, CSHL (2012–2025)  
+- Jackson Labs NIH Course (2024)  
+- Kavli Institute Summer School (2017)  
+- NBRC Travel Fellowship (2017)  
+- NET Qualified (2014)  
 
 </details>
 
 ---
 
-<div style="background-color:#fff7e6; padding:20px; border-radius:10px; margin-bottom:25px;">
-### Technical Skills
-**Experimental:** Optogenetics, Fiber Photometry, Stereotactic Viral Surgeries, Acute Brain Slice Preparation, FISH, IHC, ELISA, Calcium Imaging, LTP Recordings, Cell Culture, Microscopy, SDS-PAGE, Western Blotting, PCR, Genotyping  
-**Programming/Software:** MATLAB, Python, Bonsai, ZEN, ImageJ, GraphPad, Illustrator, EndNote, Mendeley, Zotero  
-**Behavioral Analysis:** DeepLabCut, SLEAP, A-Soid, Keypoint Moseq
-</div>
+<details>
+<summary><b>Teaching & Talks</b></summary>
+
+- NYU SPS Invited Lecture (2024)  
+- TA — Neuroscience Methods, Einstein (2024)
+
+</details>
 
 ---
 
 ## Publications
 
 <details>
-<summary style="font-weight:bold; font-size:16px;">2025</summary>
+<summary><b>Selected Papers</b></summary>
 
-**[Sex‑specific hypothalamic neural projection activity drives caregiving in mice](https://doi.org/10.1038/s41467-025-59352-7)**  
-I. Carta, T. Arora, S. Lutzu, G. Podda, G.N. Vera Ortega, S. Rudolph, A.E. Autry  
-*Nature Communications 16 (1), 4116, 2025*
-
-**[A novel method for estrous cycle staging using supervised object detection](https://doi.org/10.1038/s44277-024-00020-x)**  
-B. Babaev, S. Goyal, T. Arora, A. Autry, R.A. Ross  
-*NPP—Digital Psychiatry and Neuroscience 3 (1), 3, 2025*
+**Sex-specific hypothalamic projection activity drives caregiving** — Nature Communications 2025  
+**Automated estrous cycle staging using ML detection** — 2025  
+**Peptide modulation in Alzheimer’s model** — 2023  
+**Synaptic signaling in trisomy hippocampus model** — 2020  
 
 </details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">2024</summary>
-
-**[The potential of neuroscience in transforming business: a meta-analysis](https://doi.org/10.1186/s43093-024-00369-7)**  
-S. Khaneja, T. Arora  
-*Future Business Journal 10 (1), 77, 2024*
-
-</details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">2023</summary>
-
-**[Cyclic Glycine‑Proline Improves Memory and Reduces Amyloid Plaque Load in APP/PS1 Transgenic Mouse Model of Alzheimer’s Disease](https://doi.org/10.1155/2023/1753791)**  
-T. Arora, S.K. Sharma  
-*International Journal of Alzheimer’s Disease 2023 (1), 1753791*
-
-</details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">2020</summary>
-
-**[Effects of a tripeptide on mitogen‑activated protein kinase and glycogen synthase kinase activation in a cell line derived from the foetal hippocampus of a trisomy 16 mouse](https://doi.org/10.1007/s12640-019-00130-x)**  
-T. Arora, P. Caviedes, S.K. Sharma  
-*Neurotoxicity Research 37 (3), 714–723, 2020*
-
-</details>
-
-<details>
-<summary style="font-weight:bold; font-size:16px;">2013</summary>
-
-**[Oxcarbazepine and fluoxetine protect against mouse models of obsessive compulsive disorder through modulation of cortical serotonin and CREB pathway](https://doi.org/10.1016/j.bbr.2013.02.038)**  
-T. Arora, M. Bhowmik, R. Khanam, D. Vohora  
-*Behavioural Brain Research 247, 146–152, 2013*
-
-</details> 
 
 ---
 
 ## Contact
 
-- Email: [tushar.arora@mssm.edu](mailto:tushar.arora@mssm.edu)  
-- [LinkedIn](https://www.linkedin.com/in/tushar-arora-a58b2b36/)  
-- [Google Scholar](https://scholar.google.com/citations?user=8hG0FHQAAAAJ&hl=en)  
-- [X (Twitter)](https://x.com/tusharora9)  
-- [Bluesky](https://bsky.app/profile/tusharora9.bsky.social)
+Email: tushar.arora@mssm.edu  
+[LinkedIn](https://www.linkedin.com/in/tushar-arora-a58b2b36/)  
+[Google Scholar](https://scholar.google.com/citations?user=8hG0FHQAAAAJ&hl=en)  
+[X (Twitter)](https://x.com/tusharora9)  
+[Bluesky](https://bsky.app/profile/tusharora9.bsky.social)
+
+</div>
