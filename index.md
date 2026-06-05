@@ -6,7 +6,7 @@ layout: default
 <style>
 
 /* =========================
-   COMPUTATIONAL NEURO + BEHAVIOR SYSTEM
+   NEURO + BEHAVIOR SYSTEM (STABLE VERSION)
    ========================= */
 
 :root {
@@ -20,69 +20,50 @@ layout: default
   --a3: #A78BFA;
 }
 
-/* ===== GLOBAL ===== */
-
 html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   overflow-x: hidden;
 }
 
 /* =========================
-   BACKGROUND LAYERS
+   BACKGROUND FIELD
    ========================= */
 
-/* neural + computational field */
-.bg-field {
+.bg {
   position: fixed;
   inset: 0;
   z-index: -3;
   background:
-    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.12), transparent 45%),
-    radial-gradient(circle at 70% 60%, rgba(34,211,238,0.10), transparent 50%),
-    radial-gradient(circle at 50% 30%, rgba(167,139,250,0.08), transparent 55%);
-  animation: drift 20s ease-in-out infinite alternate;
+    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.15), transparent 45%),
+    radial-gradient(circle at 70% 60%, rgba(34,211,238,0.12), transparent 50%),
+    radial-gradient(circle at 50% 30%, rgba(167,139,250,0.10), transparent 55%);
+  animation: drift 18s ease-in-out infinite alternate;
 }
 
 @keyframes drift {
-  0% { transform: scale(1) translateY(0px); }
-  100% { transform: scale(1.08) translateY(-18px); }
-}
-
-/* scanline microscopy effect */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255,255,255,0.02),
-    rgba(255,255,255,0.02) 1px,
-    transparent 2px,
-    transparent 6px
-  );
-  opacity: 0.25;
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
 }
 
 /* =========================
-   BEHAVIORAL COMPUTATION LAYER
+   BEHAVIOR CANVAS
    ========================= */
 
-#behaviorCanvas {
+#canvas {
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.38;
   pointer-events: none;
-  mix-blend-mode: screen;
 }
 
-/* circular open-field arena */
+/* =========================
+   SIMPLE ARENA
+   ========================= */
+
 .arena {
   position: fixed;
   width: 520px;
@@ -92,74 +73,44 @@ body::before {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 1px solid rgba(167,139,250,0.15);
-  box-shadow:
-    0 0 80px rgba(34,211,238,0.05),
-    inset 0 0 80px rgba(59,130,246,0.05);
+  box-shadow: 0 0 80px rgba(34,211,238,0.06);
   z-index: -2;
-  pointer-events: none;
 }
 
 /* =========================
-   UI LAYOUT
+   CONTENT
    ========================= */
 
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
+  max-width: 900px;
+  margin: auto;
   padding: 80px 20px;
 }
 
-.hero {
-  padding: 40px 0 20px;
-}
+h1 { font-size: 42px; }
+p { color: var(--muted); line-height: 1.6; }
 
-h1 { font-size: 46px; }
-h2 { margin-top: 40px; }
-
-p, li {
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* cards */
-.card {
-  background: var(--panel);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 18px;
-  margin: 14px 0;
-  backdrop-filter: blur(10px);
-}
-
-/* =========================
-   LINKS
-   ========================= */
-
-a {
-  color: var(--a2);
-  text-decoration: none;
-}
-
-a:hover {
-  opacity: 0.8;
-}
+a { color: var(--a2); }
 
 </style>
 
-<!-- BACKGROUND -->
-<div class="bg-field"></div>
+<!-- BACKGROUND LAYERS -->
+<div class="bg"></div>
 <div class="arena"></div>
-
-<!-- BEHAVIOR CANVAS -->
-<canvas id="behaviorCanvas"></canvas>
+<canvas id="canvas"></canvas>
 
 <script>
-const canvas = document.getElementById("behaviorCanvas");
-const ctx = canvas.getContext("2d");
+/* =========================
+   SAFE CANVAS INITIALIZATION
+   (NO DOM ERRORS VERSION)
+   ========================= */
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+const c = document.getElementById("canvas");
+const ctx = c.getContext("2d");
+
+function resize(){
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
 }
 resize();
 window.addEventListener("resize", resize);
@@ -168,11 +119,11 @@ window.addEventListener("resize", resize);
    COMPUTATIONAL MOUSE MODEL
    ========================= */
 
-const mouse = {
+const m = {
   x: window.innerWidth * 0.5,
   y: window.innerHeight * 0.55,
   vx: 2,
-  vy: 1.2
+  vy: 1
 };
 
 const target = {
@@ -180,134 +131,88 @@ const target = {
   y: window.innerHeight * 0.52
 };
 
-/* trajectory memory */
 let path = [];
 
-function draw() {
+function loop(){
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,c.width,c.height);
 
-  /* attraction to "social zone" (computational behavioral model) */
-  let dx = target.x - mouse.x;
-  let dy = target.y - mouse.y;
+  /* attraction (social/reward zone) */
+  m.vx += (target.x - m.x) * 0.00002;
+  m.vy += (target.y - m.y) * 0.00002;
 
-  mouse.vx += dx * 0.00002;
-  mouse.vy += dy * 0.00002;
+  /* exploration noise */
+  m.vx += (Math.random()-0.5)*0.3;
+  m.vy += (Math.random()-0.5)*0.3;
 
-  /* exploratory stochasticity (open field behavior) */
-  mouse.vx += (Math.random() - 0.5) * 0.25;
-  mouse.vy += (Math.random() - 0.5) * 0.25;
+  m.vx *= 0.96;
+  m.vy *= 0.96;
 
-  mouse.vx *= 0.96;
-  mouse.vy *= 0.96;
+  m.x += m.vx;
+  m.y += m.vy;
 
-  mouse.x += mouse.vx;
-  mouse.y += mouse.vy;
-
-  /* arena boundary constraint */
-  const cx = canvas.width / 2;
-  const cy = canvas.height * 0.55;
+  /* boundary (open field arena) */
+  const cx = c.width/2;
+  const cy = c.height*0.55;
   const r = 250;
 
-  let dist = Math.hypot(mouse.x - cx, mouse.y - cy);
-  if (dist > r) {
-    mouse.vx *= -0.7;
-    mouse.vy *= -0.7;
+  const d = Math.hypot(m.x-cx, m.y-cy);
+  if(d>r){
+    m.vx *= -0.7;
+    m.vy *= -0.7;
   }
 
-  /* store trajectory */
-  path.push({ x: mouse.x, y: mouse.y });
-  if (path.length > 140) path.shift();
+  path.push({x:m.x,y:m.y});
+  if(path.length>120) path.shift();
 
-  /* =========================
-     DRAW TRAJECTORY (behavioral trace)
-     ========================= */
-
+  /* trajectory */
   ctx.beginPath();
-  for (let i = 0; i < path.length; i++) {
-    const p = path[i];
-    if (i === 0) ctx.moveTo(p.x, p.y);
-    else ctx.lineTo(p.x, p.y);
+  for(let i=0;i<path.length;i++){
+    const p=path[i];
+    if(i==0) ctx.moveTo(p.x,p.y);
+    else ctx.lineTo(p.x,p.y);
   }
 
-  ctx.strokeStyle = "rgba(167,139,250,0.55)";
-  ctx.lineWidth = 2;
-  ctx.shadowBlur = 10;
-  ctx.shadowColor = "rgba(167,139,250,0.3)";
+  ctx.strokeStyle="rgba(167,139,250,0.55)";
+  ctx.lineWidth=2;
   ctx.stroke();
 
-  /* current position (tracked animal / DLC-like keypoint) */
+  /* agent */
   ctx.beginPath();
-  ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(34,211,238,0.85)";
+  ctx.arc(m.x,m.y,5,0,Math.PI*2);
+  ctx.fillStyle="rgba(34,211,238,0.9)";
   ctx.fill();
 
-  /* social target zone */
+  /* target */
   ctx.beginPath();
-  ctx.arc(target.x, target.y, 7, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(59,130,246,0.35)";
+  ctx.arc(target.x,target.y,7,0,Math.PI*2);
+  ctx.fillStyle="rgba(59,130,246,0.4)";
   ctx.fill();
 
-  requestAnimationFrame(draw);
+  requestAnimationFrame(loop);
 }
 
-draw();
+loop();
 </script>
 
-<!-- MAIN CONTENT -->
 <div class="container">
 
-<div class="hero">
+# Tushar Arora, PhD  
+Neuroscientist | Neural Circuits • Behavior • Computational Modeling  
 
-# Tushar Arora, PhD
-### Neuroscientist | Neural Circuits • Behavior • Computational Modeling
-
-I study how neural circuits generate **social behavior and decision-making**, integrating in vivo recordings, computational modeling, and automated behavioral quantification.
-
-Currently Postdoctoral Fellow at Icahn School of Medicine at Mount Sinai.
-
-</div>
+I study how brain circuits generate social behavior using **in vivo recordings and computational behavioral analysis**.
 
 ---
 
-## Research
-
-<div class="card">
-### Computational Behavioral Neuroscience
-
-- Mouse open-field and social interaction paradigms  
-- Quantitative trajectory analysis of behavior  
-- Neural–behavior coupling frameworks  
-</div>
-
-<div class="card">
-### Key Project
-
-Neuropeptidergic modulation of dopamine and serotonin signaling during social reward behavior  
-(Albert Einstein College of Medicine)
-</div>
-
----
-
-## Current Position
-- Mount Sinai (2025–Present)  
-- Albert Einstein College of Medicine (2022–2025)  
-- NBRC India (2020–2021)
-
----
-
-## Publications
-
-Selected work includes:
-- Social behavior neural circuits (Nature Communications 2025)  
-- Behavioral tracking using ML-based quantification  
-- Synaptic and molecular circuit mechanisms in disease models  
+## Research Focus
+- Mouse behavior in open-field and social interaction paradigms  
+- Computational modeling of decision-making and exploration  
+- Neural circuit mechanisms underlying social reward  
 
 ---
 
 ## Contact
-
-Email: tushar.arora@mssm.edu  
-LinkedIn | Google Scholar | X | Bluesky
+tushar.arora@mssm.edu  
+LinkedIn | Google Scholar | X | Bluesky  
 
 </div>
